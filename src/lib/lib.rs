@@ -11,6 +11,7 @@
 
 pub mod config;
 pub mod kernel;
+pub mod rootfs;
 pub mod util;
 
 pub use config::{Config, KernelConfig, RootfsConfig, RootfsFormat};
