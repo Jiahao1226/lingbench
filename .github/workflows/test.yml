@@ -1,0 +1,10 @@
+name: test
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    uses: ./.github/workflows/per-commit.yml
+    with:
+      run: cargo test --workspace --locked
