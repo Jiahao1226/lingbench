@@ -1,0 +1,14 @@
+name: dco
+
+# Every commit must carry a Developer Certificate of Origin sign-off
+# (the `Signed-off-by: Name <email>` trailer added by `git commit -s`).
+
+on:
+  pull_request:
+
+jobs:
+  dco:
+    uses: ./.github/workflows/per-commit.yml
+    with:
+      run: |
+        git log -1 --format=%B | grep -qE '^Signed-off-by: .+ <.+@.+>$'
