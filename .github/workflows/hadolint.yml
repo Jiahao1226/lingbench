@@ -1,0 +1,17 @@
+name: hadolint
+
+on:
+  pull_request:
+
+jobs:
+  hadolint:
+    uses: ./.github/workflows/per-commit.yml
+    with:
+      run: |
+        if ! command -v hadolint >/dev/null 2>&1; then
+          curl -fsSL -o /tmp/hadolint \
+            https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
+          chmod +x /tmp/hadolint
+          sudo mv /tmp/hadolint /usr/local/bin/hadolint
+        fi
+        hadolint guest/rootfs/Containerfile
