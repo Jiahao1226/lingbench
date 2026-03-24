@@ -1,0 +1,14 @@
+name: mdformat
+
+on:
+  pull_request:
+
+jobs:
+  mdformat:
+    uses: ./.github/workflows/per-commit.yml
+    with:
+      run: |
+        if ! command -v mdformat >/dev/null 2>&1; then
+          pipx install mdformat || python3 -m pip install --user mdformat
+        fi
+        mdformat --check .
