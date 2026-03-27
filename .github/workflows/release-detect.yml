@@ -1,4 +1,4 @@
-name: release-detect
+name: LingBench Release Detect
 
 on:
   push:
@@ -8,16 +8,18 @@ on:
 
 jobs:
   detect:
+    name: Detect Version Change
     runs-on: ubuntu-24.04
     outputs:
       version: ${{ steps.check.outputs.version }}
       release: ${{ steps.check.outputs.release }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout With Full History
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Detect version change
+      - name: Compare Workspace Version Across Push Range
         id: check
         env:
           BEFORE: ${{ github.event.before }}
@@ -51,6 +53,7 @@ jobs:
           fi
 
   release:
+    name: Trigger Release Workflow
     needs: detect
     if: needs.detect.outputs.release == 'true'
     uses: ./.github/workflows/release.yml

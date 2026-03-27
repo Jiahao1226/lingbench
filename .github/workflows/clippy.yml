@@ -1,10 +1,11 @@
-name: clippy
+name: LingBench Clippy
 
 on:
   pull_request:
 
 jobs:
   clippy:
+    name: Lint With Clippy
     uses: ./.github/workflows/per-commit.yml
     with:
       run: cargo clippy --workspace --all-targets --locked -- -D warnings

@@ -1,11 +1,15 @@
-name: reuse
+name: LingBench REUSE
 
 on:
   pull_request:
 
 jobs:
   reuse:
+    name: Verify REUSE Compliance
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: fsfe/reuse-action@v5
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run REUSE Compliance Check
+        uses: fsfe/reuse-action@v5

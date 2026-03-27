@@ -1,4 +1,4 @@
-name: dco
+name: LingBench DCO
 
 # Every commit must carry a Developer Certificate of Origin sign-off
 # (the `Signed-off-by: Name <email>` trailer added by `git commit -s`).
@@ -8,6 +8,7 @@ on:
 
 jobs:
   dco:
+    name: Verify DCO Sign-off
     uses: ./.github/workflows/per-commit.yml
     with:
       run: |

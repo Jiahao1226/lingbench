@@ -1,4 +1,4 @@
-name: per-commit
+name: LingBench per-commit runner
 
 # Reusable workflow: runs a shell command at every non-merge commit in the
 # PR range, so the caller's check (build, clippy, test, ...) doubles as a
@@ -14,19 +14,24 @@ on:
 
 jobs:
   run:
+    name: Execute Per-Commit Check
     runs-on: ubuntu-latest
     env:
       CARGO_TERM_COLOR: always
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout PR With Full History
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
-      - run: rustup show active-toolchain || rustup toolchain install
-      - uses: Swatinem/rust-cache@v2
+      - name: Install Pinned Rust Toolchain
+        run: rustup show active-toolchain || rustup toolchain install
 
-      - name: Execute at each commit
+      - name: Restore Cargo Build Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Run Caller Check At Each Commit In Range
         env:
           PER_COMMIT_RUN: ${{ inputs.run }}
           EVENT_NAME: ${{ github.event_name }}

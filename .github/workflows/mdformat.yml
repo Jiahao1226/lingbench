@@ -1,10 +1,11 @@
-name: mdformat
+name: LingBench Mdformat
 
 on:
   pull_request:
 
 jobs:
   mdformat:
+    name: Check Markdown Formatting
     uses: ./.github/workflows/per-commit.yml
     with:
       run: |

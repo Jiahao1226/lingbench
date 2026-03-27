@@ -1,10 +1,11 @@
-name: hadolint
+name: LingBench Hadolint
 
 on:
   pull_request:
 
 jobs:
   hadolint:
+    name: Lint Guest Containerfile
     uses: ./.github/workflows/per-commit.yml
     with:
       run: |

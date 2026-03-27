@@ -1,4 +1,4 @@
-name: release
+name: LingBench Release
 
 on:
   workflow_call:
@@ -16,36 +16,38 @@ on:
 
 jobs:
   release:
+    name: Build And Publish Release
     runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Release Commit
+        uses: actions/checkout@v4
 
-      - name: Install build dependencies
+      - name: Install Kernel And Rootfs Build Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
             build-essential make bc bison flex libssl-dev libelf-dev \
             cpio tar xz-utils e2fsprogs podman
 
-      - name: Install Rust toolchain
+      - name: Install Pinned Rust Toolchain
         run: rustup show active-toolchain || rustup toolchain install
 
-      - name: Build lingbench CLI
+      - name: Build The LingBench CLI
         run: cargo build --release --locked
 
-      - name: Build guest kernel and rootfs
+      - name: Build Guest Kernel And Rootfs Via LingBench CLI
         run: ./target/release/lingbench build all
 
-      - name: Stage release artifacts
+      - name: Stage Release Artifacts
         run: |
           mkdir -p release
           cp build/kernel/bzImage      release/lingbench-kernel-x86_64
           cp build/rootfs/rootfs.ext4  release/lingbench-rootfs.ext4
           cp build/rootfs/rootfs.cpio  release/lingbench-rootfs.cpio
 
-      - name: Publish release
+      - name: Create GitHub Release And Upload Artifacts
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ inputs.version }}

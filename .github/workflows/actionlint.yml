@@ -1,10 +1,11 @@
-name: actionlint
+name: LingBench Actionlint
 
 on:
   pull_request:
 
 jobs:
   actionlint:
+    name: Lint Workflow YAML
     uses: ./.github/workflows/per-commit.yml
     with:
       run: |

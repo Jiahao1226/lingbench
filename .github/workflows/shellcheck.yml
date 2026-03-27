@@ -1,10 +1,11 @@
-name: shellcheck
+name: LingBench Shellcheck
 
 on:
   pull_request:
 
 jobs:
   shellcheck:
+    name: Lint Shell Scripts
     uses: ./.github/workflows/per-commit.yml
     with:
       run: |
