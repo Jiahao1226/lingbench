@@ -1,4 +1,5 @@
 #!/bin/sh
+# SPDX-FileCopyrightText: Copyright (c) 2026 LingCage. All rights reserved.
 # lingbench in-guest benchmark dispatcher.
 #
 # Invoked by the host-side runner (over vsock, ssh, or the serial

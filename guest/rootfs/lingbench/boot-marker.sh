@@ -1,4 +1,5 @@
 #!/bin/sh
+# SPDX-FileCopyrightText: Copyright (c) 2026 LingCage. All rights reserved.
 # Emit a boot-complete marker to the serial console. The host-side
 # runner watches ttyS0 for this exact line and timestamps it to derive
 # guest-ready latency (boot time).

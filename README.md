@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 LingCage. All rights reserved.
 <div align="center">
     <h1>LingBench</h1>
     <p><strong>LingBench is a VMM benchmarking framework that builds a

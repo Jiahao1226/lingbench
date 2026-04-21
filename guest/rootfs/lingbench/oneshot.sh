@@ -1,4 +1,5 @@
 #!/bin/sh
+# SPDX-FileCopyrightText: Copyright (c) 2026 LingCage. All rights reserved.
 # lingbench one-shot benchmark runner.
 #
 # Reads `lingbench.scenario=<name>` (and optional `lingbench.args=<args>`,

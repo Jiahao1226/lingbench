@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 LingCage. All rights reserved.
 workdir = "build"
 
 [kernel]
