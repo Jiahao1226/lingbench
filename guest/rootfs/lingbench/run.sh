@@ -35,9 +35,9 @@ block I/O (virtio-blk):
   io-randwrite                 fio 4k randwrite, iodepth 32, 10s
   io-seqread                   fio 1M seqread, iodepth 16, 10s
 
-network (virtio-net, requires host-side server):
-  net-iperf3-tcp <host>        iperf3 TCP_STREAM for 10s
-  net-iperf3-udp <host>        iperf3 UDP_STREAM for 10s
+network (DISABLED - requires host-side server + bridge config):
+#  net-iperf3-tcp <host>        iperf3 TCP_STREAM for 10s
+#  net-iperf3-udp <host>        iperf3 UDP_STREAM for 10s
 
 application:
   app-redis                    redis-benchmark against a local redis
@@ -88,12 +88,12 @@ case "$scenario" in
             --direct=1 --runtime=10 --time_based --group_reporting
         ;;
 
-    net-iperf3-tcp)
-        iperf3 -c "${1:?host ip required}" -t 10
-        ;;
-    net-iperf3-udp)
-        iperf3 -c "${1:?host ip required}" -u -b 0 -t 10
-        ;;
+#    net-iperf3-tcp)
+#        iperf3 -c "${1:?host ip required}" -t 10
+#        ;;
+#    net-iperf3-udp)
+#        iperf3 -c "${1:?host ip required}" -u -b 0 -t 10
+#        ;;
 
     app-redis)
         redis-server --daemonize yes --save '' --logfile /tmp/redis.log
