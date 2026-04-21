@@ -44,6 +44,10 @@ application:
   app-nginx                    wrk against a local nginx
   app-memcached                memcached stats smoke test
 
+all:
+  all                          run all scenarios above in sequence (excludes network tests)
+
+
 Any scenario can be prefixed with `time` externally; this script only
 runs the workload and writes its native output to stdout.
 EOF
@@ -108,6 +112,17 @@ case "$scenario" in
         wrk -t2 -c64 -d10s http://127.0.0.1/
         nginx -s stop 2>/dev/null || true
         ;;
+    all)
+        # Run all scenarios in sequence (excludes network tests)
+        for scenario in cpu-sysbench cpu-coremark cpu-stress mem-sysbench meminfo io-randread io-randwrite io-seqread app-redis app-nginx app-memcached; do
+            echo ""
+            echo "========================================"
+            echo "[LingBench] Running: $scenario"
+            echo "========================================"
+            sh "$0" "$scenario"
+        done
+        ;;
+
     app-memcached)
         memcached -u nobody -d -P /tmp/memcached.pid
         sleep 0.2
