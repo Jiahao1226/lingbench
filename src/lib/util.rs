@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 LingCage
+// SPDX-FileCopyrightText: Copyright (c) 2026 LingCage. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 

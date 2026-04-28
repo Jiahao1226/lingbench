@@ -1,12 +1,33 @@
-workdir = "build"
+[global]
+workdir = "./build"
+kernel = "kernel/bzImage"
+rootfs = "rootfs/rootfs.ext4"
 
-[kernel]
-version = "6.12.20"
-arch = "x86_64"
-config_fragment = "guest/kernel/microvm.config"
+[[vmm]]
+name = "firecracker"
+binary = "/home/jiahao/vmm-benchmark/firecracker/build/cargo_target/release/firecracker"
+enabled = true
 
-[rootfs]
-containerfile = "guest/rootfs/Containerfile"
-size_mib = 512
-builder = "podman"
-formats = ["ext4", "cpio"]
+[[vmm]]
+name = "cloud-hypervisor"
+binary = "/home/jiahao/vmm-benchmark/cloud-hypervisor/target/release/cloud-hypervisor"
+enabled = true
+
+[[vmm]]
+name = "crosvm"
+binary = "/home/jiahao/vmm-benchmark/crosvm/target/release/crosvm"
+enabled = true
+
+[[vmm]]
+name = "stratovirt"
+binary = "/home/jiahao/vmm-benchmark/stratovirt/target/release/stratovirt"
+enabled = true
+
+[logs]
+level = "basic"
+enabled = true
+dir = "~/lingbench_results/logs/"
+
+[report]
+enabled = true
+output_dir = "~/lingbench_results/"

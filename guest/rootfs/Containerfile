@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 LingCage. All rights reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+
 # lingbench guest rootfs — multi-stage
 #
 # Stage 1 builds benchmarks that aren't packaged by Alpine.
@@ -48,6 +52,8 @@ RUN apk add --no-cache \
     curl bash ca-certificates
 
 COPY --from=builder /rootfs-extras/ /
+
+COPY nginx-fix/default.conf /etc/nginx/http.d/default.conf
 
 COPY lingbench/ /lingbench/
 RUN chmod +x /lingbench/boot-marker.sh /lingbench/run.sh /lingbench/oneshot.sh

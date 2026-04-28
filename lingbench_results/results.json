@@ -1,0 +1,670 @@
+[
+  {
+    "vmm": "firecracker",
+    "scenario": "cpu-sysbench",
+    "success": true,
+    "error": null,
+    "duration_ms": 11778,
+    "metrics": [
+      {
+        "name": "events_per_second",
+        "value": 5567.18,
+        "ts": 1777357461025
+      }
+    ]
+  },
+  {
+    "vmm": "firecracker",
+    "scenario": "cpu-coremark",
+    "success": true,
+    "error": null,
+    "duration_ms": 25139,
+    "metrics": [
+      {
+        "name": "score",
+        "value": 51747.659594,
+        "ts": 1777357488175
+      }
+    ]
+  },
+  {
+    "vmm": "firecracker",
+    "scenario": "cpu-stress",
+    "success": true,
+    "error": null,
+    "duration_ms": 11766,
+    "metrics": [
+      {
+        "name": "bogo_ops",
+        "value": 2755.84,
+        "ts": 1777357501951
+      }
+    ]
+  },
+  {
+    "vmm": "firecracker",
+    "scenario": "mem-sysbench",
+    "success": true,
+    "error": null,
+    "duration_ms": 2796,
+    "metrics": [
+      {
+        "name": "ops_per_second",
+        "value": 3994061.45,
+        "ts": 1777357506758
+      }
+    ]
+  },
+  {
+    "vmm": "firecracker",
+    "scenario": "meminfo",
+    "success": true,
+    "error": null,
+    "duration_ms": 1634,
+    "metrics": [
+      {
+        "name": "MemTotal_KB",
+        "value": 479016.0,
+        "ts": 1777357510401
+      },
+      {
+        "name": "MemFree_KB",
+        "value": 461528.0,
+        "ts": 1777357510401
+      }
+    ]
+  },
+  {
+    "vmm": "firecracker",
+    "scenario": "io-randread",
+    "success": true,
+    "error": null,
+    "duration_ms": 11962,
+    "metrics": [
+      {
+        "name": "iops",
+        "value": 27800.0,
+        "ts": 1777357524374
+      }
+    ]
+  },
+  {
+    "vmm": "firecracker",
+    "scenario": "io-randwrite",
+    "success": true,
+    "error": null,
+    "duration_ms": 11984,
+    "metrics": [
+      {
+        "name": "iops",
+        "value": 154000.0,
+        "ts": 1777357538369
+      }
+    ]
+  },
+  {
+    "vmm": "firecracker",
+    "scenario": "io-seqread",
+    "success": true,
+    "error": null,
+    "duration_ms": 11971,
+    "metrics": [
+      {
+        "name": "iops",
+        "value": 16400.0,
+        "ts": 1777357552352
+      }
+    ]
+  },
+  {
+    "vmm": "firecracker",
+    "scenario": "io-seqwrite",
+    "success": true,
+    "error": null,
+    "duration_ms": 1744,
+    "metrics": []
+  },
+  {
+    "vmm": "firecracker",
+    "scenario": "app-redis",
+    "success": true,
+    "error": null,
+    "duration_ms": 24728,
+    "metrics": [
+      {
+        "name": "SET_req_per_sec",
+        "value": 1111111.12,
+        "ts": 1777357582843
+      }
+    ]
+  },
+  {
+    "vmm": "firecracker",
+    "scenario": "app-nginx",
+    "success": true,
+    "error": null,
+    "duration_ms": 11976,
+    "metrics": [
+      {
+        "name": "requests_per_sec",
+        "value": 226662.24,
+        "ts": 1777357596829
+      }
+    ]
+  },
+  {
+    "vmm": "firecracker",
+    "scenario": "app-memcached",
+    "success": true,
+    "error": null,
+    "duration_ms": 1971,
+    "metrics": [
+      {
+        "name": "curr_connections",
+        "value": 2.0,
+        "ts": 1777357600810
+      }
+    ]
+  },
+  {
+    "vmm": "cloud-hypervisor",
+    "scenario": "cpu-sysbench",
+    "success": true,
+    "error": null,
+    "duration_ms": 10343,
+    "metrics": [
+      {
+        "name": "events_per_second",
+        "value": 5628.42,
+        "ts": 1777357615163
+      }
+    ]
+  },
+  {
+    "vmm": "cloud-hypervisor",
+    "scenario": "cpu-coremark",
+    "success": true,
+    "error": null,
+    "duration_ms": 23655,
+    "metrics": [
+      {
+        "name": "score",
+        "value": 51906.379766,
+        "ts": 1777357639830
+      }
+    ]
+  },
+  {
+    "vmm": "cloud-hypervisor",
+    "scenario": "cpu-stress",
+    "success": true,
+    "error": null,
+    "duration_ms": 10351,
+    "metrics": [
+      {
+        "name": "bogo_ops",
+        "value": 2717.68,
+        "ts": 1777357651193
+      }
+    ]
+  },
+  {
+    "vmm": "cloud-hypervisor",
+    "scenario": "mem-sysbench",
+    "success": true,
+    "error": null,
+    "duration_ms": 1380,
+    "metrics": [
+      {
+        "name": "ops_per_second",
+        "value": 4044410.15,
+        "ts": 1777357653595
+      }
+    ]
+  },
+  {
+    "vmm": "cloud-hypervisor",
+    "scenario": "meminfo",
+    "success": true,
+    "error": null,
+    "duration_ms": 380,
+    "metrics": [
+      {
+        "name": "MemTotal_KB",
+        "value": 2024996.0,
+        "ts": 1777357654990
+      },
+      {
+        "name": "MemFree_KB",
+        "value": 2004312.0,
+        "ts": 1777357654990
+      }
+    ]
+  },
+  {
+    "vmm": "cloud-hypervisor",
+    "scenario": "io-randread",
+    "success": true,
+    "error": null,
+    "duration_ms": 10550,
+    "metrics": [
+      {
+        "name": "iops",
+        "value": 135000.0,
+        "ts": 1777357666557
+      }
+    ]
+  },
+  {
+    "vmm": "cloud-hypervisor",
+    "scenario": "io-randwrite",
+    "success": true,
+    "error": null,
+    "duration_ms": 10562,
+    "metrics": [
+      {
+        "name": "iops",
+        "value": 148000.0,
+        "ts": 1777357678144
+      }
+    ]
+  },
+  {
+    "vmm": "cloud-hypervisor",
+    "scenario": "io-seqread",
+    "success": true,
+    "error": null,
+    "duration_ms": 10549,
+    "metrics": [
+      {
+        "name": "iops",
+        "value": 19800.0,
+        "ts": 1777357689755
+      }
+    ]
+  },
+  {
+    "vmm": "cloud-hypervisor",
+    "scenario": "io-seqwrite",
+    "success": true,
+    "error": null,
+    "duration_ms": 336,
+    "metrics": []
+  },
+  {
+    "vmm": "cloud-hypervisor",
+    "scenario": "app-redis",
+    "success": true,
+    "error": null,
+    "duration_ms": 22124,
+    "metrics": [
+      {
+        "name": "SET_req_per_sec",
+        "value": 1234567.88,
+        "ts": 1777357714257
+      }
+    ]
+  },
+  {
+    "vmm": "cloud-hypervisor",
+    "scenario": "app-nginx",
+    "success": true,
+    "error": null,
+    "duration_ms": 10631,
+    "metrics": [
+      {
+        "name": "requests_per_sec",
+        "value": 243121.48,
+        "ts": 1777357725914
+      }
+    ]
+  },
+  {
+    "vmm": "cloud-hypervisor",
+    "scenario": "app-memcached",
+    "success": true,
+    "error": null,
+    "duration_ms": 598,
+    "metrics": [
+      {
+        "name": "curr_connections",
+        "value": 2.0,
+        "ts": 1777357727528
+      }
+    ]
+  },
+  {
+    "vmm": "crosvm",
+    "scenario": "cpu-sysbench",
+    "success": true,
+    "error": null,
+    "duration_ms": 12678,
+    "metrics": [
+      {
+        "name": "events_per_second",
+        "value": 5545.72,
+        "ts": 1777357743222
+      }
+    ]
+  },
+  {
+    "vmm": "crosvm",
+    "scenario": "cpu-coremark",
+    "success": true,
+    "error": null,
+    "duration_ms": 26227,
+    "metrics": [
+      {
+        "name": "score",
+        "value": 51628.649207,
+        "ts": 1777357770482
+      }
+    ]
+  },
+  {
+    "vmm": "crosvm",
+    "scenario": "cpu-stress",
+    "success": true,
+    "error": null,
+    "duration_ms": 12682,
+    "metrics": [
+      {
+        "name": "bogo_ops",
+        "value": 2737.36,
+        "ts": 1777357784199
+      }
+    ]
+  },
+  {
+    "vmm": "crosvm",
+    "scenario": "mem-sysbench",
+    "success": true,
+    "error": null,
+    "duration_ms": 3853,
+    "metrics": [
+      {
+        "name": "ops_per_second",
+        "value": 3892149.36,
+        "ts": 1777357789079
+      }
+    ]
+  },
+  {
+    "vmm": "crosvm",
+    "scenario": "meminfo",
+    "success": true,
+    "error": null,
+    "duration_ms": 4934,
+    "metrics": [
+      {
+        "name": "MemTotal_KB",
+        "value": 478776.0,
+        "ts": 1777357795040
+      },
+      {
+        "name": "MemFree_KB",
+        "value": 456272.0,
+        "ts": 1777357795040
+      }
+    ]
+  },
+  {
+    "vmm": "crosvm",
+    "scenario": "io-randread",
+    "success": true,
+    "error": null,
+    "duration_ms": 13979,
+    "metrics": [
+      {
+        "name": "iops",
+        "value": 25500.0,
+        "ts": 1777357810048
+      }
+    ]
+  },
+  {
+    "vmm": "crosvm",
+    "scenario": "io-randwrite",
+    "success": true,
+    "error": null,
+    "duration_ms": 14059,
+    "metrics": [
+      {
+        "name": "iops",
+        "value": 29800.0,
+        "ts": 1777357825144
+      }
+    ]
+  },
+  {
+    "vmm": "crosvm",
+    "scenario": "io-seqread",
+    "success": true,
+    "error": null,
+    "duration_ms": 14038,
+    "metrics": [
+      {
+        "name": "iops",
+        "value": 17300.0,
+        "ts": 1777357840215
+      }
+    ]
+  },
+  {
+    "vmm": "crosvm",
+    "scenario": "io-seqwrite",
+    "success": true,
+    "error": null,
+    "duration_ms": 3952,
+    "metrics": []
+  },
+  {
+    "vmm": "crosvm",
+    "scenario": "app-redis",
+    "success": true,
+    "error": null,
+    "duration_ms": 19756,
+    "metrics": [
+      {
+        "name": "SET_req_per_sec",
+        "value": 1428571.38,
+        "ts": 1777357865979
+      }
+    ]
+  },
+  {
+    "vmm": "crosvm",
+    "scenario": "app-nginx",
+    "success": true,
+    "error": null,
+    "duration_ms": 12618,
+    "metrics": [
+      {
+        "name": "requests_per_sec",
+        "value": 412529.5,
+        "ts": 1777357879628
+      }
+    ]
+  },
+  {
+    "vmm": "crosvm",
+    "scenario": "app-memcached",
+    "success": true,
+    "error": null,
+    "duration_ms": 5256,
+    "metrics": [
+      {
+        "name": "curr_connections",
+        "value": 2.0,
+        "ts": 1777357885915
+      }
+    ]
+  },
+  {
+    "vmm": "stratovirt",
+    "scenario": "cpu-sysbench",
+    "success": true,
+    "error": null,
+    "duration_ms": 11969,
+    "metrics": [
+      {
+        "name": "events_per_second",
+        "value": 5536.83,
+        "ts": 1777357900912
+      }
+    ]
+  },
+  {
+    "vmm": "stratovirt",
+    "scenario": "cpu-coremark",
+    "success": true,
+    "error": null,
+    "duration_ms": 25293,
+    "metrics": [
+      {
+        "name": "score",
+        "value": 51877.004339,
+        "ts": 1777357927234
+      }
+    ]
+  },
+  {
+    "vmm": "stratovirt",
+    "scenario": "cpu-stress",
+    "success": true,
+    "error": null,
+    "duration_ms": 11934,
+    "metrics": [
+      {
+        "name": "bogo_ops",
+        "value": 2754.65,
+        "ts": 1777357940196
+      }
+    ]
+  },
+  {
+    "vmm": "stratovirt",
+    "scenario": "mem-sysbench",
+    "success": true,
+    "error": null,
+    "duration_ms": 3025,
+    "metrics": [
+      {
+        "name": "ops_per_second",
+        "value": 3909075.24,
+        "ts": 1777357944257
+      }
+    ]
+  },
+  {
+    "vmm": "stratovirt",
+    "scenario": "meminfo",
+    "success": true,
+    "error": null,
+    "duration_ms": 4074,
+    "metrics": [
+      {
+        "name": "MemTotal_KB",
+        "value": 478784.0,
+        "ts": 1777357949362
+      },
+      {
+        "name": "MemFree_KB",
+        "value": 457352.0,
+        "ts": 1777357949362
+      }
+    ]
+  },
+  {
+    "vmm": "stratovirt",
+    "scenario": "io-randread",
+    "success": true,
+    "error": null,
+    "duration_ms": 13174,
+    "metrics": [
+      {
+        "name": "iops",
+        "value": 28700.0,
+        "ts": 1777357963571
+      }
+    ]
+  },
+  {
+    "vmm": "stratovirt",
+    "scenario": "io-randwrite",
+    "success": true,
+    "error": null,
+    "duration_ms": 13168,
+    "metrics": [
+      {
+        "name": "iops",
+        "value": 72300.0,
+        "ts": 1777357977779
+      }
+    ]
+  },
+  {
+    "vmm": "stratovirt",
+    "scenario": "io-seqread",
+    "success": true,
+    "error": null,
+    "duration_ms": 13137,
+    "metrics": [
+      {
+        "name": "iops",
+        "value": 4678.0,
+        "ts": 1777357991946
+      }
+    ]
+  },
+  {
+    "vmm": "stratovirt",
+    "scenario": "io-seqwrite",
+    "success": true,
+    "error": null,
+    "duration_ms": 3110,
+    "metrics": []
+  },
+  {
+    "vmm": "stratovirt",
+    "scenario": "app-redis",
+    "success": true,
+    "error": null,
+    "duration_ms": 18352,
+    "metrics": [
+      {
+        "name": "SET_req_per_sec",
+        "value": 1408450.62,
+        "ts": 1777358015466
+      }
+    ]
+  },
+  {
+    "vmm": "stratovirt",
+    "scenario": "app-nginx",
+    "success": true,
+    "error": null,
+    "duration_ms": 11821,
+    "metrics": [
+      {
+        "name": "requests_per_sec",
+        "value": 407153.74,
+        "ts": 1777358028315
+      }
+    ]
+  },
+  {
+    "vmm": "stratovirt",
+    "scenario": "app-memcached",
+    "success": true,
+    "error": null,
+    "duration_ms": 4410,
+    "metrics": [
+      {
+        "name": "curr_connections",
+        "value": 2.0,
+        "ts": 1777358033763
+      }
+    ]
+  }
+]

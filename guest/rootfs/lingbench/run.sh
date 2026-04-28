@@ -1,4 +1,8 @@
 #!/bin/sh
+# SPDX-FileCopyrightText: Copyright (c) 2026 LingCage. All rights reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+
 # lingbench in-guest benchmark dispatcher.
 #
 # Invoked by the host-side runner (over vsock, ssh, or the serial
@@ -34,14 +38,18 @@ block I/O (virtio-blk):
   io-randwrite                 fio 4k randwrite, iodepth 32, 10s
   io-seqread                   fio 1M seqread, iodepth 16, 10s
 
-network (virtio-net, requires host-side server):
-  net-iperf3-tcp <host>        iperf3 TCP_STREAM for 10s
-  net-iperf3-udp <host>        iperf3 UDP_STREAM for 10s
+network (DISABLED - requires host-side server + bridge config):
+#  net-iperf3-tcp <host>        iperf3 TCP_STREAM for 10s
+#  net-iperf3-udp <host>        iperf3 UDP_STREAM for 10s
 
 application:
   app-redis                    redis-benchmark against a local redis
   app-nginx                    wrk against a local nginx
   app-memcached                memcached stats smoke test
+
+all:
+  all                          run all scenarios above in sequence (excludes network tests)
+
 
 Any scenario can be prefixed with `time` externally; this script only
 runs the workload and writes its native output to stdout.
@@ -87,12 +95,12 @@ case "$scenario" in
             --direct=1 --runtime=10 --time_based --group_reporting
         ;;
 
-    net-iperf3-tcp)
-        iperf3 -c "${1:?host ip required}" -t 10
-        ;;
-    net-iperf3-udp)
-        iperf3 -c "${1:?host ip required}" -u -b 0 -t 10
-        ;;
+#    net-iperf3-tcp)
+#        iperf3 -c "${1:?host ip required}" -t 10
+#        ;;
+#    net-iperf3-udp)
+#        iperf3 -c "${1:?host ip required}" -u -b 0 -t 10
+#        ;;
 
     app-redis)
         redis-server --daemonize yes --save '' --logfile /tmp/redis.log
@@ -107,6 +115,17 @@ case "$scenario" in
         wrk -t2 -c64 -d10s http://127.0.0.1/
         nginx -s stop 2>/dev/null || true
         ;;
+    all)
+        # Run all scenarios in sequence (excludes network tests)
+        for scenario in cpu-sysbench cpu-coremark cpu-stress mem-sysbench meminfo io-randread io-randwrite io-seqread app-redis app-nginx app-memcached; do
+            echo ""
+            echo "========================================"
+            echo "[LingBench] Running: $scenario"
+            echo "========================================"
+            sh "$0" "$scenario"
+        done
+        ;;
+
     app-memcached)
         memcached -u nobody -d -P /tmp/memcached.pid
         sleep 0.2

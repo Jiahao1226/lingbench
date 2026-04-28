@@ -1,153 +1,160 @@
-<div align="center">
-    <h1>LingBench</h1>
-    <p><strong>LingBench is a VMM benchmarking framework that builds a
-    minimal Linux guest and drives it through a fixed suite of
-    workloads. It gives apples-to-apples numbers for virtual machine
-    monitors across CPU, memory, block I/O, network, and full
-    application paths.</strong></p>
-</div>
+# LingBench
 
-> **Note:** LingBench is still under heavy development. APIs, config
-> schema, and artifact layout may change significantly.
+A VMM (Virtual Machine Monitor) benchmarking framework for Linux. Run standardized performance tests across multiple VMMs and scenarios, with real-time progress output and auto-generated HTML reports.
 
-## Repository layout
+## Features
 
-```
-.
-├── Cargo.toml
-├── lingbench.toml                     # default build configuration
-├── rust-toolchain.toml
-├── guest/
-│   ├── kernel/
-│   │   └── microvm.config             # kconfig fragment merged with defconfig
-│   └── rootfs/
-│       ├── Containerfile              # Alpine guest image
-│       └── lingbench/                 # in-guest dispatcher scripts
-│           ├── boot-marker.sh
-│           ├── oneshot.sh
-│           └── run.sh
-└── src/
-    ├── main.rs                        # `lingbench` CLI
-    ├── cli.rs
-    └── lib/                           # library modules
-        ├── lib.rs
-        ├── config.rs
-        ├── kernel.rs
-        ├── rootfs.rs
-        └── util.rs
-```
+- **Multi-VMM Support**: Firecracker, Cloud-Hypervisor, Crosvm, Stratovirt
+- **11 Benchmark Scenarios**: CPU (sysbench, coremark, stress-ng), Memory (sysbench, meminfo), I/O (fio randread/randwrite/seqread/seqwrite), Application (Redis, Nginx, Memcached)
+- **Real-time Progress**: Live terminal output showing VMM startup, scenario status, and results
+- **HTML Reports**: Auto-generated reports with Chart.js bar charts comparing VMM performance (10 scenario charts + detailed results table)
+- **Light Theme**: Clean, readable report design with scenario tooltips
+- **Results Export**: JSON output for post-processing or report regeneration
+- **Graceful Shutdown**: Ctrl+C interrupts cleanly, killing VMM instances
+- **TOML Configuration**: All paths, VMMs, and settings managed via `lingbench.toml`
 
-## Test suites
+## Supported VMMs
 
-The guest ships a fixed set of benchmarks, each chosen to exercise a
-specific axis of the VMM. CoreMark is built from source in a builder
-stage of the Containerfile; everything else is pulled from Alpine's apk
-repositories.
+| VMM | Type | Configuration |
+|-----|------|---------------|
+| Firecracker | API socket | `--api-sock` |
+| Cloud-Hypervisor | CLI | `--api-socket` |
+| Crosvm | CLI | USB device + socket |
+| Stratovirt | CLI | serial socket + vsock |
 
-- **CoreMark** — EEMBC's reference single-thread CPU benchmark. Used as
-  a clean CPU-only number with no I/O in the loop.
-- **sysbench** — CPU, memory, and OLTP microbenchmarks. Quick CPU/memory
-  numbers and the driver for in-guest database workloads.
-- **stress-ng** — pathological CPU, memory, and syscall stressors.
-  Pushes the vCPU and guest kernel into corner cases the other
-  benchmarks avoid.
-- **fio** — block I/O benchmark. Measures virtio-blk (and
-  vhost-user-blk) throughput, IOPS, and latency across read/write mixes
-  and queue depths.
-- **iperf3** — virtio-net TCP and UDP throughput. The primary
-  network-path number.
-- **wrk + nginx** — HTTP load generator driving the in-guest `nginx`.
-  Exercises the combined network + syscall + userspace path under a real
-  request/response workload.
-- **redis** (with `redis-benchmark`) — mixed CPU + network + syscall
-  workload. Stresses the small-request path that trips up schedulers and
-  interrupt delivery.
-- **memcached** — a second net + syscall app workload, complementary to
-  redis, used to cross-check network-stack behaviour.
-- **pgbench** (from `postgresql-client`) — transactional database
-  workload. Exercises fsync, block I/O, and CPU together.
+## Supported Scenarios
 
-## Build dependencies
+| Scenario | Tool | Metric |
+|----------|------|--------|
+| `cpu-sysbench` | sysbench | events/second |
+| `cpu-coremark` | CoreMark | CoreMark score |
+| `cpu-stress` | stress-ng | bogo ops/second |
+| `mem-sysbench` | sysbench | ops/second |
+| `meminfo` | /proc/meminfo | MemTotal/MemFree (KB) |
+| `io-randread` | fio | IOPS |
+| `io-randwrite` | fio | IOPS |
+| `io-seqread` | fio | IOPS |
+| `io-seqwrite` | fio | IOPS |
+| `app-redis` | redis-benchmark | SET requests/second |
+| `app-nginx` | wrk | requests/second |
+| `app-memcached` | memcached | curr_connections |
 
-To build locally you need, on the host:
+## Quick Start
 
-- **Rust** — stable toolchain, pinned via
-  [rust-toolchain.toml](rust-toolchain.toml). Install via
-  [rustup](https://rustup.rs):
-
-  ```sh
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-  ```
-
-- **A C toolchain and kernel build prerequisites** — `build-essential`
-  (or equivalent), `make`, `bc`, `bison`, `flex`, `libssl-dev`,
-  `libelf-dev`, `cpio`, `tar`, `xz-utils`.
-
-- **Podman** (default) or Docker — required to build the rootfs from
-  [guest/rootfs/Containerfile](guest/rootfs/Containerfile). Override via
-  the `rootfs.builder` key in [lingbench.toml](lingbench.toml).
-
-- **e2fsprogs** — `mkfs.ext4` is used to produce the ext4 image
-  (`mkfs.ext4 -d` requires a reasonably recent version).
-
-- **cpio** — only needed when the `cpio` rootfs format is requested.
-
-On DEB distros:
-
-```sh
-sudo apt-get update && sudo apt-get install -y \
-    build-essential make bc bison flex libssl-dev libelf-dev \
-    cpio tar xz-utils e2fsprogs podman
-```
-
-## Building
-
-```sh
+```bash
+# Build
 cargo build --release
-./target/release/lingbench build all
+
+# Run all VMMs with all scenarios
+./target/release/lingbench run
+
+# Run specific VMMs
+./target/release/lingbench run --vmm firecracker,cloud-hypervisor
+
+# Run specific scenario
+./target/release/lingbench run --vmm firecracker --scenario cpu-sysbench
+
+# Generate report from saved results
+./target/release/lingbench report
 ```
 
-The CLI surface:
+## Configuration
 
-```text
-VMM test framework
+Edit `lingbench.toml`:
 
-Usage: lingbench [OPTIONS] <COMMAND>
+```toml
+[global]
+workdir = "./build"
+kernel = "./build/bzImage"
+rootfs = "./build/rootfs.ext4"
 
-Commands:
-  build  Build guest artifacts
-  clean  Remove the working directory
-  help   Print this message or the help of the given subcommand(s)
+[[vmm]]
+name = "firecracker"
+binary = "/usr/local/bin/firecracker"
+enabled = true
 
-Options:
-  -c, --config <CONFIG>  [default: lingbench.toml]
-  -h, --help             Print help
-  -V, --version          Print version
+[report]
+output_dir = "./lingbench_results"
 ```
 
-`lingbench.toml` is read from the current directory; pass `--config` to
-point at a different file.
+## Output Format
 
-## Artifacts
+```
+Running benchmarks...
+VMMs: ["firecracker", "cloud-hypervisor", "crosvm", "stratovirt"]
+Scenarios: ["cpu-sysbench", "cpu-coremark", ...]
+firecracker | cpu-sysbench | running
+firecracker | cpu-sysbench | running (5s)
+firecracker | cpu-sysbench | ✓ | 11752ms | events_per_second=5.6k
+----------------------------------------
+========================================
+[VMM Finished] firecracker
+========================================
+Results saved to lingbench_results/results.json
+Report generated: lingbench_results/lingbench_Results_2026-04-28_12-00.html
+```
 
-All outputs land under the `workdir` from
-[lingbench.toml](lingbench.toml) (`build/` by default):
+Report filename format: `lingbench_Results_YYYY-MM-DD_HH-MM.html`
 
-- `build/downloads/linux-<version>.tar.xz` — cached upstream kernel
-  tarball. Reused across rebuilds; SHA-256 verified if `kernel.sha256`
-  is set.
-- `build/kernel/linux-<version>/` — extracted and built kernel tree.
-- `build/kernel/bzImage` (x86_64) / `Image` (arm64) — the bootable
-  kernel image the VMM loads. This is the file you point `-kernel` at.
-- `build/rootfs/rootfs.tar` — flat tar export of the built container,
-  used as the staging source for the other formats.
-- `build/rootfs/rootfs.ext4` — ext4 disk image (default format), sized
-  per `rootfs.size_mib`. Attach as a virtio-blk device and boot with
-  `root=/dev/vda`.
-- `build/rootfs/rootfs.cpio` — newc cpio archive suitable for use as an
-  initramfs (`-initrd`) when the VMM prefers that path.
+## Report Structure
 
-Inside the guest, `/lingbench/boot-marker.sh` emits an early serial
-marker on `ttyS0` for boottime measurement, `/lingbench/oneshot.sh` runs
-a cmdline-driven scenario and powers off, and a respawning `getty` on
-`ttyS0` is the fallback when no scenario is passed.
+HTML report includes:
+- **Header**: LingBench logo, date, environment
+- **Charts**: Bar charts for 10 scenarios (CPU → Memory → IO → App ordering)
+- **Detailed Results Table**: All VMMs × all scenarios with formatted values
+- **Tooltips**: Hover on scenario title to see benchmark command details
+
+## Keyboard Interrupt
+
+Press `Ctrl+C` to gracefully stop. The tool will:
+1. Print `Received Ctrl+C, cleaning up...`
+2. Kill all running VMM instances
+3. Exit cleanly
+
+## Project Structure
+
+```
+lingbench/
+├── Cargo.toml              # Workspace manifest
+├── lingbench.toml          # Configuration
+├── assets/
+│   └── lingcage_logo.svg   # Report logo
+├── src/
+│   ├── main.rs             # CLI entry point, report orchestration
+│   ├── cli.rs              # Command-line argument parsing
+│   └── lib/
+│       ├── lib.rs          # Library exports
+│       ├── config.rs       # TOML configuration loader
+│       ├── kernel.rs       # Kernel handling
+│       ├── rootfs.rs       # Rootfs image management
+│       ├── metrics/        # Metrics collection
+│       │   ├── collector.rs   # Metric ingestion and storage
+│       │   ├── protocol.rs    # HostMessage parsing
+│       │   └── types.rs       # Metric types
+│       ├── report/         # HTML report generation
+│       │   ├── data.rs        # Report data structures
+│       │   └── generator.rs   # HTML template generation
+│       ├── runner/         # Benchmark orchestration
+│       │   └── scenario.rs    # Scenario execution
+│       └── vmm/            # VMM implementations
+│           ├── traits.rs      # VmmRunner/VmInstance traits
+│           ├── registry.rs    # VMM auto-detection
+│           ├── firecracker.rs  # Firecracker implementation
+│           ├── cloudhypervisor.rs # Cloud-Hypervisor implementation
+│           ├── crosvm.rs      # Crosvm implementation
+│           └── stratovirt.rs  # Stratovirt implementation
+├── guest/                  # Guest environment
+│   ├── rootfs/            # Rootfs build (Containerfile)
+│   └── kernel/            # Kernel build
+├── tests/                 # Integration tests
+│   ├── cli_integration_tests.rs
+│   ├── metrics_validation_tests.rs
+│   └── vmm_integration_tests.rs
+└── build/                 # Build output (gitignored)
+```
+
+## Dependencies
+
+- Rust (stable, edition 2024)
+- Guest kernel: bzImage at path configured in `lingbench.toml`
+- Guest rootfs: ext4 image with benchmark tools (sysbench, fio, stress-ng, redis, nginx, memcached)

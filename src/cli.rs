@@ -1,62 +1,61 @@
-// SPDX-FileCopyrightText: 2026 LingCage
+// SPDX-FileCopyrightText: Copyright (c) 2026 LingCage. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 
 use std::path::PathBuf;
-
-use anyhow::Result;
 use clap::{Parser, Subcommand};
-use lingbench::{Config, kernel, rootfs};
 
 #[derive(Parser)]
-#[command(name = "lingbench", about = "VMM test framework", version)]
-pub struct Cli {
-    #[arg(long, short, default_value = "lingbench.toml", global = true)]
-    config: PathBuf,
-    #[command(subcommand)]
-    command: Command,
-}
+#[command(name = "lingbench")]
+pub enum Command {
+    /// Run VMM benchmark
+    Run {
+        /// VMM names to run (all enabled if not specified, comma-separated)
+        #[arg(long, value_delimiter = ',')]
+        vmm: Option<Vec<String>>,
 
-#[derive(Subcommand)]
-enum Command {
-    /// Build guest artifacts
+        /// Scenarios to run (all if not specified, "all" or comma-separated)
+        #[arg(long, value_delimiter = ',')]
+        scenario: Option<Vec<String>>,
+
+        /// Output directory
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
+
+    /// Generate report only (using existing data)
+    Report {
+        /// Input results.json path (from --save-results)
+        #[arg(long)]
+        input: Option<PathBuf>,
+
+        /// Report output path
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
+
+    /// List available configurations
+    List {
+        #[arg(long)]
+        vmm: bool,
+
+        #[arg(long)]
+        scenario: bool,
+    },
+
+    /// Build guest image
     Build {
         #[command(subcommand)]
         target: BuildTarget,
     },
-    /// Remove the working directory
-    Clean,
 }
 
 #[derive(Subcommand)]
-enum BuildTarget {
-    /// Fetch and build the guest kernel
+pub enum BuildTarget {
+    /// Build kernel
     Kernel,
-    /// Build the guest rootfs from a Containerfile
+    /// Build rootfs
     Rootfs,
-    /// Build both kernel and rootfs
+    /// Build all
     All,
-}
-
-impl Cli {
-    pub fn run(self) -> Result<()> {
-        let cfg = Config::load(&self.config)?;
-        match self.command {
-            Command::Build { target } => match target {
-                BuildTarget::Kernel => kernel::build(&cfg)?,
-                BuildTarget::Rootfs => rootfs::build(&cfg)?,
-                BuildTarget::All => {
-                    kernel::build(&cfg)?;
-                    rootfs::build(&cfg)?;
-                }
-            },
-            Command::Clean => {
-                if cfg.workdir.exists() {
-                    std::fs::remove_dir_all(&cfg.workdir)?;
-                    tracing::info!("removed {}", cfg.workdir.display());
-                }
-            }
-        }
-        Ok(())
-    }
 }
