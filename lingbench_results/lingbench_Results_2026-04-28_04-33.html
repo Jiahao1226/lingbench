@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LingBench Results - 2026-04-28_04-33</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            color: #333333;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { text-align: center; padding: 40px 0; }
+        h1 { font-size: 2.5rem; color: #1a1a1a; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        h1 .logo { height: 1.2em; vertical-align: middle; }
+        .subtitle { color: #888; font-size: 1.1rem; }
+        .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 30px; margin: 30px 0; }
+        .chart-container { background: rgba(255,255,255,0.95); border-radius: 16px; padding: 25px; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .chart-title { font-size: 1.3rem; color: #1a1a1a; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .chart-subtitle { font-size: 0.85rem; color: #888; margin-bottom: 15px; }
+        .tooltip-hint { position: relative; display: inline-block; cursor: help; }
+        .tooltip-hint:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            white-space: pre-line;
+            max-width: 500px;
+            min-width: 350px;
+            z-index: 100;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+        .chart-wrapper { position: relative; height: 300px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        th { color: #333; font-weight: 500; text-transform: uppercase; font-size: 0.8rem; background: #f8f9fa; }
+        tr:hover { background: rgba(0,0,0,0.05); }
+        .best-value { color: #4fc3f7; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><img class="logo" src="lingcage_logo.svg" alt="LingCage" /> LingBench Results</h1>
+            <p class="subtitle">VMM Performance Comparison - 2026-04-28_04-33</p>
+        </header>
+
+        <div class="chart-grid">
+
+            <div class="chart-container">
+                <h3 class="chart-title tooltip-hint" data-tooltip="CPU Sysbench: Measures CPU performance by calculating prime numbers.
+Tool: sysbench 1.0.20
+Test: 10 seconds, 1 thread, prime numbers up to 10000
+Cmd: sysbench cpu --threads=1 --time=10 run">CPU Sysbench (Δ 1.0%)</h3>
+                <p class="chart-subtitle">Tool: sysbench 1.0.20 | Test: 10s, 1 thread, primes ≤10000</p>
+                <div class="chart-wrapper"><canvas id="cpuSysbenchChart"></canvas></div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title tooltip-hint" data-tooltip="CPU Coremark: Standard CPU benchmark measuring integer and floating-point performance.
+Tool: CoreMark v1.0
+Test: Single-threaded performance
+Cmd: coremark">CPU Coremark Score (Δ 0.4%)</h3>
+                <p class="chart-subtitle">Tool: CoreMark v1.0 | Test: Single-threaded</p>
+                <div class="chart-wrapper"><canvas id="cpuCoremarkChart"></canvas></div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title tooltip-hint" data-tooltip="CPU Stress: Measures CPU stress using bogo operations.
+Tool: stress 1.4.12
+Test: 10 seconds, 1 worker
+Cmd: stress-ng --cpu 1 --timeout 10s --metrics-brief">CPU Stress (Δ 2.4%)</h3>
+                <p class="chart-subtitle">Tool: stress 1.4.12 | Test: 10s, 1 worker</p>
+                <div class="chart-wrapper"><canvas id="cpuStressChart"></canvas></div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title tooltip-hint" data-tooltip="Memory Sysbench: Measures memory bandwidth and latency.
+Tool: sysbench 1.0.20
+Test: 4GB memory, sequential access
+Cmd: sysbench memory --memory-total-size=4G run">Memory Sysbench (Δ 3.8%)</h3>
+                <p class="chart-subtitle">Tool: sysbench 1.0.20 | Test: 4GB memory, sequential access</p>
+                <div class="chart-wrapper"><canvas id="memSysbenchChart"></canvas></div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title tooltip-hint" data-tooltip="IO Random Read: Measures random read performance with 4KB blocks.
+Tool: fio 3.36
+Test: 30 seconds, 4KB block size, random read
+Cmd: fio --name=randread --filename=/tmp/fio.bin --size=256M --rw=randread --bs=4k --ioengine=libaio --iodepth=32 --direct=1 --runtime=10 --time_based --group_reporting">IO Random Read (Δ 404.4%)</h3>
+                <p class="chart-subtitle">Tool: fio 3.36 | Test: 30s, 4KB blocks, random read</p>
+                <div class="chart-wrapper"><canvas id="ioRandreadChart"></canvas></div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title tooltip-hint" data-tooltip="IO Random Write: Measures random write performance with 4KB blocks.
+Tool: fio 3.36
+Test: 30 seconds, 4KB block size, random write
+Cmd: fio --name=randwrite --filename=/tmp/fio.bin --size=256M --rw=randwrite --bs=4k --ioengine=libaio --iodepth=32 --direct=1 --runtime=10 --time_based --group_reporting">IO Random Write (Δ 393.2%)</h3>
+                <p class="chart-subtitle">Tool: fio 3.36 | Test: 30s, 4KB blocks, random write</p>
+                <div class="chart-wrapper"><canvas id="ioRandwriteChart"></canvas></div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title tooltip-hint" data-tooltip="IO Sequential Read: Measures sequential read performance with 4KB blocks.
+Tool: fio 3.36
+Test: 30 seconds, 4KB block size, sequential read
+Cmd: fio --name=seqread --filename=/tmp/fio.bin --size=256M --rw=read --bs=1M --ioengine=libaio --iodepth=16 --direct=1 --runtime=10 --time_based --group_reporting">IO Sequential Read (Δ 315.7%)</h3>
+                <p class="chart-subtitle">Tool: fio 3.36 | Test: 30s, 4KB blocks, sequential read</p>
+                <div class="chart-wrapper"><canvas id="ioSeqreadChart"></canvas></div>
+            </div>
+
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">📋 Detailed Results Table</h2>
+            <table>
+                <thead><tr><th>Scenario</th><th>firecracker</th><th>cloud-hypervisor</th><th>crosvm</th><th>stratovirt</th></tr></thead><tbody><tr><td>CPU Sysbench (events/s)</td><td>5.6k</td><td>5.6k</td><td>5.5k</td><td>5.6k</td></tr><tr><td>CPU Coremark Score (CoreMark)</td><td>52.0k</td><td>51.9k</td><td>51.8k</td><td>51.8k</td></tr><tr><td>CPU Stress (bogo ops/s)</td><td>2.7k</td><td>2.8k</td><td>2.7k</td><td>2.7k</td></tr><tr><td>Memory Sysbench (ops/s)</td><td>4.0M</td><td>4.0M</td><td>3.9M</td><td>4.0M</td></tr><tr><td>Memory Info (KB)</td><td>479.0k, 461.5k</td><td>2.0M, 2.0M</td><td>478.8k, 457.6k</td><td>478.8k, 457.0k</td></tr><tr><td>IO Random Read (IOPS)</td><td>22.8k</td><td>115.0k</td><td>24.6k</td><td>63.0k</td></tr><tr><td>IO Random Write (IOPS)</td><td>142.0k</td><td>145.0k</td><td>29.4k</td><td>72.4k</td></tr><tr><td>IO Sequential Read (IOPS)</td><td>16.2k</td><td>19.4k</td><td>17.3k</td><td>4.7k</td></tr><tr><td>IO Sequential Write (IOPS)</td><td>OK</td><td>OK</td><td>OK</td><td>OK</td></tr><tr><td>Redis GET (ops/s)</td><td>1.1M</td><td>1.2M</td><td>1.4M</td><td>1.4M</td></tr><tr><td>Nginx QPS (req/s)</td><td>230.5k</td><td>251.2k</td><td>417.8k</td><td>411.2k</td></tr><tr><td>Memcached QPS (ops/s)</td><td>2.0</td><td>2.0</td><td>2.0</td><td>2.0</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const colors = {
+            cloudHypervisor: '#4fc3f7',
+            firecracker: '#ff7043',
+            stratovirt: '#66bb6a',
+            crosvm: '#ba68c8'
+        };
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false, labels: { color: '#888', padding: 20 } } },
+            scales: { x: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } } }
+        };
+new Chart(document.getElementById('cpuSysbenchChart'), {"data":{"datasets":[{"backgroundColor":["#ff7043","#4fc3f7","#ba68c8","#66bb6a"],"data":[5585.7,5580.57,5542.91,5596.37],"label":""}],"labels":["firecracker","cloud-hypervisor","crosvm","stratovirt"]},"options":{"maintainAspectRatio":false,"plugins":{"legend":{"display":false}},"responsive":true,"scales":{"x":{"grid":{"color":"rgba(255,255,255,0.05)"},"ticks":{"color":"#888"}},"y":{"beginAtZero":false,"grid":{"color":"rgba(255,255,255,0.05)"},"suggestedMax":5700.0,"suggestedMin":5500.0,"ticks":{"color":"#888"}}}},"type":"bar"});
+new Chart(document.getElementById('cpuCoremarkChart'), {"data":{"datasets":[{"backgroundColor":["#ff7043","#4fc3f7","#ba68c8","#66bb6a"],"data":[51989.791096,51850.106057,51757.398955,51798.832172],"label":""}],"labels":["firecracker","cloud-hypervisor","crosvm","stratovirt"]},"options":{"maintainAspectRatio":false,"plugins":{"legend":{"display":false}},"responsive":true,"scales":{"x":{"grid":{"color":"rgba(255,255,255,0.05)"},"ticks":{"color":"#888"}},"y":{"beginAtZero":false,"grid":{"color":"rgba(255,255,255,0.05)"},"suggestedMax":52100.0,"suggestedMin":51700.0,"ticks":{"color":"#888"}}}},"type":"bar"});
+new Chart(document.getElementById('cpuStressChart'), {"data":{"datasets":[{"backgroundColor":["#ff7043","#4fc3f7","#ba68c8","#66bb6a"],"data":[2731.45,2769.22,2703.24,2739.59],"label":""}],"labels":["firecracker","cloud-hypervisor","crosvm","stratovirt"]},"options":{"maintainAspectRatio":false,"plugins":{"legend":{"display":false}},"responsive":true,"scales":{"x":{"grid":{"color":"rgba(255,255,255,0.05)"},"ticks":{"color":"#888"}},"y":{"beginAtZero":false,"grid":{"color":"rgba(255,255,255,0.05)"},"suggestedMax":2800.0,"suggestedMin":2600.0,"ticks":{"color":"#888"}}}},"type":"bar"});
+new Chart(document.getElementById('memSysbenchChart'), {"data":{"datasets":[{"backgroundColor":["#ff7043","#4fc3f7","#ba68c8","#66bb6a"],"data":[3976304.69,4015737.68,3870361.48,3995721.59],"label":""}],"labels":["firecracker","cloud-hypervisor","crosvm","stratovirt"]},"options":{"maintainAspectRatio":false,"plugins":{"legend":{"display":false}},"responsive":true,"scales":{"x":{"grid":{"color":"rgba(255,255,255,0.05)"},"ticks":{"color":"#888"}},"y":{"beginAtZero":false,"grid":{"color":"rgba(255,255,255,0.05)"},"suggestedMax":4100000.0,"suggestedMin":3800000.0,"ticks":{"color":"#888"}}}},"type":"bar"});
+new Chart(document.getElementById('ioRandreadChart'), {"data":{"datasets":[{"backgroundColor":["#ff7043","#4fc3f7","#ba68c8","#66bb6a"],"data":[22800.0,115000.0,24600.0,63000.0],"label":""}],"labels":["firecracker","cloud-hypervisor","crosvm","stratovirt"]},"options":{"maintainAspectRatio":false,"plugins":{"legend":{"display":false}},"responsive":true,"scales":{"x":{"grid":{"color":"rgba(255,255,255,0.05)"},"ticks":{"color":"#888"}},"y":{"beginAtZero":true,"grid":{"color":"rgba(255,255,255,0.05)"},"ticks":{"color":"#888"}}}},"type":"bar"});
+new Chart(document.getElementById('ioRandwriteChart'), {"data":{"datasets":[{"backgroundColor":["#ff7043","#4fc3f7","#ba68c8","#66bb6a"],"data":[142000.0,145000.0,29400.0,72400.0],"label":""}],"labels":["firecracker","cloud-hypervisor","crosvm","stratovirt"]},"options":{"maintainAspectRatio":false,"plugins":{"legend":{"display":false}},"responsive":true,"scales":{"x":{"grid":{"color":"rgba(255,255,255,0.05)"},"ticks":{"color":"#888"}},"y":{"beginAtZero":true,"grid":{"color":"rgba(255,255,255,0.05)"},"ticks":{"color":"#888"}}}},"type":"bar"});
+new Chart(document.getElementById('ioSeqreadChart'), {"data":{"datasets":[{"backgroundColor":["#ff7043","#4fc3f7","#ba68c8","#66bb6a"],"data":[16200.0,19400.0,17300.0,4667.0],"label":""}],"labels":["firecracker","cloud-hypervisor","crosvm","stratovirt"]},"options":{"maintainAspectRatio":false,"plugins":{"legend":{"display":false}},"responsive":true,"scales":{"x":{"grid":{"color":"rgba(255,255,255,0.05)"},"ticks":{"color":"#888"}},"y":{"beginAtZero":true,"grid":{"color":"rgba(255,255,255,0.05)"},"ticks":{"color":"#888"}}}},"type":"bar"});
+    </script>
+</body>
+</html>
