@@ -11,7 +11,11 @@
 
 pub mod config;
 pub mod kernel;
+pub mod metrics;
+pub mod report;
 pub mod rootfs;
+pub mod runner;
 pub mod util;
+pub mod vmm;
 
 pub use config::{Config, KernelConfig, RootfsConfig, RootfsFormat};

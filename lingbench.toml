@@ -10,3 +10,34 @@ containerfile = "guest/rootfs/Containerfile"
 size_mib = 512
 builder = "podman"
 formats = ["ext4", "cpio"]
+
+vmm_dir = "./vmm"
+
+[[vmm]]
+name = "firecracker"
+binary = "firecracker/firecracker"
+enabled = true
+
+[[vmm]]
+name = "cloud-hypervisor"
+binary = "cloud-hypervisor/cloud-hypervisor"
+enabled = true
+
+[[vmm]]
+name = "crosvm"
+binary = "crosvm/crosvm"
+enabled = true
+
+[[vmm]]
+name = "stratovirt"
+binary = "stratovirt/stratovirt"
+enabled = true
+
+[logs]
+level = "basic"
+enabled = true
+dir = "./logs"
+
+[report]
+enabled = true
+output_dir = "./results"
