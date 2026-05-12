@@ -7,6 +7,7 @@ use std::fs;
 use std::path::PathBuf;
 
 /// Parse test data, get last run results
+#[allow(dead_code)]
 fn get_last_run_output() -> Option<String> {
     let report_path = std::env::var("LINGBENCH_REPORT_PATH")
         .map(PathBuf::from)
@@ -16,7 +17,8 @@ fn get_last_run_output() -> Option<String> {
 }
 
 /// Extract metric values from HTML report
-fn extract_metric_from_report(report: &str, scenario: &str, vmm: &str) -> Option<f64> {
+#[allow(dead_code)]
+fn extract_metric_from_report(_report: &str, _scenario: &str, _vmm: &str) -> Option<f64> {
     // Simplified implementation: find values in table
     // In production should parse stricter format
     None
@@ -103,8 +105,8 @@ fn test_parse_io_randread_iops() {
     if let Some(caps) = re.captures(output) {
         let value_str = caps.get(1).unwrap().as_str();
         // Support k suffix (e.g., "110k" -> 110000)
-        let value: f64 = if value_str.ends_with('k') {
-            value_str[..value_str.len()-1].parse::<f64>().unwrap() * 1000.0
+        let value: f64 = if let Some(stripped) = value_str.strip_suffix('k') {
+            stripped.parse::<f64>().unwrap() * 1000.0
         } else {
             value_str.parse().unwrap()
         };
@@ -127,8 +129,8 @@ fn test_parse_io_iops_with_k_suffix() {
     for (input, expected) in test_cases {
         if let Some(caps) = re.captures(input) {
             let value_str = caps.get(1).unwrap().as_str();
-            let value: f64 = if value_str.ends_with('k') {
-                value_str[..value_str.len()-1].parse::<f64>().unwrap() * 1000.0
+            let value: f64 = if let Some(stripped) = value_str.strip_suffix('k') {
+                stripped.parse::<f64>().unwrap() * 1000.0
             } else {
                 value_str.parse().unwrap()
             };
@@ -195,7 +197,7 @@ fn test_integration_all_vmm_run_successfully() {
                 "--output", &format!("/tmp/lingbench-{}-test", vmm)
             ])
             .output()
-            .expect(&format!("Failed to run lingbench for {}", vmm));
+            .unwrap_or_else(|_| panic!("Failed to run lingbench for {}", vmm));
         
         let stdout = String::from_utf8_lossy(&output.stdout);
         assert!(

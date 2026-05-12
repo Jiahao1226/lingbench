@@ -264,7 +264,7 @@ fn test_all_vmm_can_run_cpu_sysbench() {
                 "--output", &format!("/tmp/test-{}-multi", vmm),
             ])
             .output()
-            .expect(&format!("Failed to run {}", vmm));
+            .unwrap_or_else(|_| panic!("Failed to run {}", vmm));
         
         assert!(
             output.status.success(),
@@ -275,7 +275,7 @@ fn test_all_vmm_can_run_cpu_sysbench() {
         // Check serial log
         let serial_path = get_serial_log(vmm);
         let serial_log = fs::read_to_string(&serial_path)
-            .expect(&format!("Should have serial log for {}", vmm));
+            .unwrap_or_else(|_| panic!("Should have serial log for {}", vmm));
         
         assert!(
             serial_log.contains("LINGBENCH_RESULT_END"),

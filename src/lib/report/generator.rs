@@ -36,9 +36,7 @@ fn calculate_nice_y_axis(min_val: f64, max_val: f64) -> (f64, f64, f64) {
 
     // Determine the "nice" step based on range
     let range = raw_max - raw_min;
-    let nice_step = if range <= 200.0 {
-        100.0
-    } else if range <= 2000.0 {
+    let nice_step = if range <= 2000.0 {
         100.0
     } else if range <= 20000.0 {
         1000.0

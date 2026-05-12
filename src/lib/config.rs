@@ -238,7 +238,7 @@ mod tests {
         // Both are explicitly set; firecracker=true, crosvm=false
         assert_eq!(enabled.len(), 1);
         assert_eq!(enabled[0].name, "firecracker");
-        assert_eq!(config.vmm_configs[0].enabled, true);
-        assert_eq!(config.vmm_configs[1].enabled, false);
+        assert!(config.vmm_configs[0].enabled);
+        assert!(!config.vmm_configs[1].enabled);
     }
 }

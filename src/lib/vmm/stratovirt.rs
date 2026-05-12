@@ -90,11 +90,10 @@ impl VmInstance for StratovirtInstance {
 
         // Check if serial log contains completion marker
         // This handles the case where VM has completed but process hasn't exited yet
-        if let Some(output) = self.get_serial_output() {
-            if output.contains("LINGBENCH_RESULT_END") {
+        if let Some(output) = self.get_serial_output()
+            && output.contains("LINGBENCH_RESULT_END") {
                 return false;
             }
-        }
 
         true
     }

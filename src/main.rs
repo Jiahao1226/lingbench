@@ -405,11 +405,10 @@ fn build_charts(vmm_results: &[VmmResult]) -> Vec<ChartData> {
         // Collect data points for this scenario across all VMMs
         let mut data_points: Vec<(&str, f64)> = Vec::new();
         for vmm in vmm_results {
-            if let Some(scenario_result) = vmm.scenarios.iter().find(|s| s.name == scenario_name) {
-                if !scenario_result.metrics.is_empty() {
+            if let Some(scenario_result) = vmm.scenarios.iter().find(|s| s.name == scenario_name)
+                && !scenario_result.metrics.is_empty() {
                     data_points.push((vmm.name.as_str(), scenario_result.metrics[0].value));
                 }
-            }
         }
 
         if data_points.len() < 2 {
@@ -591,9 +590,7 @@ fn calculate_nice_y_axis(min_val: f64, max_val: f64) -> (f64, f64, f64) {
 
     // Determine the "nice" step based on range
     let range = raw_max - raw_min;
-    let nice_step = if range <= 200.0 {
-        100.0
-    } else if range <= 2000.0 {
+    let nice_step = if range <= 2000.0 {
         100.0
     } else if range <= 20000.0 {
         1000.0

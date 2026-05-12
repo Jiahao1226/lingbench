@@ -124,9 +124,8 @@ mod tests {
 
     #[test]
     fn test_registry() {
-        let registry = VmmRegistry::with_standard_runners();
-        let names = registry.names();
-        // Should have at least pre-registered runners
-        assert!(!names.is_empty() || true); // allow empty if binary does not exist
+        let _registry = VmmRegistry::with_standard_runners();
+        // Registry may be empty if binaries are not installed
+        // Just verify registry can be created without panicking
     }
 }

@@ -4,7 +4,7 @@
 
 //! Scenario Runner - Run VMM + scenario combination tests
 
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::time::{Duration, Instant};
 use std::sync::Arc;
 use std::sync::atomic::Ordering;
@@ -62,77 +62,66 @@ impl ScenarioRunner {
         
         match scenario {
             "cpu-sysbench" => {
-                if let Ok(re) = Regex::new(r"events per second:\s*([0-9.]+)") {
-                    if let Some(caps) = re.captures(output) {
-                        if let Ok(val) = caps[1].parse::<f64>() {
+                if let Ok(re) = Regex::new(r"events per second:\s*([0-9.]+)")
+                    && let Some(caps) = re.captures(output)
+                        && let Ok(val) = caps[1].parse::<f64>() {
                             return vec![Metric {
                                 name: "events_per_second".to_string(),
                                 value: val,
                                 ts: timestamp,
                             }];
                         }
-                    }
-                }
             }
             "cpu-coremark" => {
-                if let Ok(re) = Regex::new(r"(?:CoreMark 1.0:|Iterations/Sec\s*:)\s*([0-9.]+)") {
-                    if let Some(caps) = re.captures(output) {
-                        if let Ok(val) = caps[1].parse::<f64>() {
+                if let Ok(re) = Regex::new(r"(?:CoreMark 1.0:|Iterations/Sec\s*:)\s*([0-9.]+)")
+                    && let Some(caps) = re.captures(output)
+                        && let Ok(val) = caps[1].parse::<f64>() {
                             return vec![Metric {
                                 name: "score".to_string(),
                                 value: val,
                                 ts: timestamp,
                             }];
                         }
-                    }
-                }
             }
             "cpu-stress" => {
                 if let Ok(re) = Regex::new(r"^.*cpu\s+\d+\s+[\d.]+\s+[\d.]+\s+[\d.]+\s+(\d+\.\d+)\s+(\d+\.\d+)\s*$") {
                     for line in output.lines() {
-                        if line.contains("stress-ng: metrc") && line.contains("cpu") {
-                            if let Some(caps) = re.captures(line) {
-                                if let Some(val_str) = caps.get(1) {
-                                    if let Ok(val) = val_str.as_str().parse::<f64>() {
+                        if line.contains("stress-ng: metrc") && line.contains("cpu")
+                            && let Some(caps) = re.captures(line)
+                                && let Some(val_str) = caps.get(1)
+                                    && let Ok(val) = val_str.as_str().parse::<f64>() {
                                         return vec![Metric {
                                             name: "bogo_ops".to_string(),
                                             value: val,
                                             ts: timestamp,
                                         }];
                                     }
-                                }
-                            }
-                        }
                     }
                 }
             }
             "mem-sysbench" => {
-                if let Ok(re) = Regex::new(r"Total operations:.*?\(([0-9.]+)\s*per second\)") {
-                    if let Some(caps) = re.captures(output) {
-                        if let Ok(val) = caps[1].parse::<f64>() {
+                if let Ok(re) = Regex::new(r"Total operations:.*?\(([0-9.]+)\s*per second\)")
+                    && let Some(caps) = re.captures(output)
+                        && let Ok(val) = caps[1].parse::<f64>() {
                             return vec![Metric {
                                 name: "ops_per_second".to_string(),
                                 value: val,
                                 ts: timestamp,
                             }];
                         }
-                    }
-                }
-                if let Ok(re) = Regex::new(r"ops/s:\s*([0-9.]+)") {
-                    if let Some(caps) = re.captures(output) {
-                        if let Ok(val) = caps[1].parse::<f64>() {
+                if let Ok(re) = Regex::new(r"ops/s:\s*([0-9.]+)")
+                    && let Some(caps) = re.captures(output)
+                        && let Ok(val) = caps[1].parse::<f64>() {
                             return vec![Metric {
                                 name: "ops_per_second".to_string(),
                                 value: val,
                                 ts: timestamp,
                             }];
                         }
-                    }
-                }
             }
             "io-randread" | "io-randwrite" | "io-seqread" => {
-                if let Ok(re) = Regex::new(r"IOPS=\s*([0-9k.]+)") {
-                    if let Some(caps) = re.captures(output) {
+                if let Ok(re) = Regex::new(r"IOPS=\s*([0-9k.]+)")
+                    && let Some(caps) = re.captures(output) {
                         let val_str = &caps[1];
                         let val_str = val_str.trim_end_matches('k');
                         if let Ok(val) = val_str.parse::<f64>() {
@@ -148,74 +137,63 @@ impl ScenarioRunner {
                             }];
                         }
                     }
-                }
             }
             "meminfo" => {
                 let mut metrics = Vec::new();
-                if let Ok(re) = Regex::new(r"MemTotal:\s*([0-9]+)\s*kB") {
-                    if let Some(caps) = re.captures(output) {
-                        if let Ok(val) = caps[1].parse::<f64>() {
+                if let Ok(re) = Regex::new(r"MemTotal:\s*([0-9]+)\s*kB")
+                    && let Some(caps) = re.captures(output)
+                        && let Ok(val) = caps[1].parse::<f64>() {
                             metrics.push(Metric {
                                 name: "MemTotal_KB".to_string(),
                                 value: val,
                                 ts: timestamp,
                             });
                         }
-                    }
-                }
-                if let Ok(re) = Regex::new(r"MemFree:\s*([0-9]+)\s*kB") {
-                    if let Some(caps) = re.captures(output) {
-                        if let Ok(val) = caps[1].parse::<f64>() {
+                if let Ok(re) = Regex::new(r"MemFree:\s*([0-9]+)\s*kB")
+                    && let Some(caps) = re.captures(output)
+                        && let Ok(val) = caps[1].parse::<f64>() {
                             metrics.push(Metric {
                                 name: "MemFree_KB".to_string(),
                                 value: val,
                                 ts: timestamp,
                             });
                         }
-                    }
-                }
                 if !metrics.is_empty() {
                     return metrics;
                 }
             }
             "app-redis" => {
-                if let Ok(re) = Regex::new(r"(GET|SET|HSET):\s*([0-9.]+)\s*requests per second") {
-                    if let Some(caps) = re.captures(output) {
-                        if let Ok(val) = caps[2].parse::<f64>() {
+                if let Ok(re) = Regex::new(r"(GET|SET|HSET):\s*([0-9.]+)\s*requests per second")
+                    && let Some(caps) = re.captures(output)
+                        && let Ok(val) = caps[2].parse::<f64>() {
                             return vec![Metric {
                                 name: format!("{}_req_per_sec", &caps[1]),
                                 value: val,
                                 ts: timestamp,
                             }];
                         }
-                    }
-                }
             }
             "app-nginx" => {
-                if let Ok(re) = Regex::new(r"Requests/sec:\s*([0-9.]+)") {
-                    if let Some(caps) = re.captures(output) {
-                        if let Ok(val) = caps[1].parse::<f64>() {
+                if let Ok(re) = Regex::new(r"Requests/sec:\s*([0-9.]+)")
+                    && let Some(caps) = re.captures(output)
+                        && let Ok(val) = caps[1].parse::<f64>() {
                             return vec![Metric {
                                 name: "requests_per_sec".to_string(),
                                 value: val,
                                 ts: timestamp,
                             }];
                         }
-                    }
-                }
             }
             "app-memcached" => {
-                if let Ok(re) = Regex::new(r"STAT curr_connections\s+([0-9]+)") {
-                    if let Some(caps) = re.captures(output) {
-                        if let Ok(val) = caps[1].parse::<f64>() {
+                if let Ok(re) = Regex::new(r"STAT curr_connections\s+([0-9]+)")
+                    && let Some(caps) = re.captures(output)
+                        && let Ok(val) = caps[1].parse::<f64>() {
                             return vec![Metric {
                                 name: "curr_connections".to_string(),
                                 value: val,
                                 ts: timestamp,
                             }];
                         }
-                    }
-                }
             }
             _ => {}
         }
@@ -330,30 +308,27 @@ impl ScenarioRunner {
             }
 
             // Check serial output for completion
-            if let Some(output) = instance.get_serial_output() {
-                if output.contains("LINGBENCH_RESULT_END") {
+            if let Some(output) = instance.get_serial_output()
+                && output.contains("LINGBENCH_RESULT_END") {
                     did_complete = true;
                     break;
                 }
-            }
 
             // Check if process exited
             if !instance.is_running() {
-                if let Some(output) = instance.get_serial_output() {
-                    if output.contains("LINGBENCH_RESULT_END") {
+                if let Some(output) = instance.get_serial_output()
+                    && output.contains("LINGBENCH_RESULT_END") {
                         did_complete = true;
                         break;
                     }
-                }
                 // Process exited but marker not found - wait for serial buffer to flush
                 // Guest often reboots/powerdowns right after test completes, need longer wait
                 std::thread::sleep(Duration::from_millis(5000));
-                if let Some(output) = instance.get_serial_output() {
-                    if output.contains("LINGBENCH_RESULT_END") {
+                if let Some(output) = instance.get_serial_output()
+                    && output.contains("LINGBENCH_RESULT_END") {
                         did_complete = true;
                         break;
                     }
-                }
                 break;
             }
 

@@ -45,7 +45,7 @@ impl MetricsCollector {
 
         let mut data = self.data.lock().unwrap();
         data.entry(key.clone())
-            .or_insert_with(Vec::new)
+            .or_default()
             .push(batch);
 
         Ok(())

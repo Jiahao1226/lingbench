@@ -93,7 +93,7 @@ impl VmmRunner for FirecrackerRunner {
 
         // 3. Configure boot source
         let boot_result = Command::new("curl")
-            .args(&[
+            .args([
                 "-N", "--unix-socket", socket.to_str().unwrap(),
                 "-X", "PUT",
                 "http://localhost/boot-source",
@@ -112,7 +112,7 @@ impl VmmRunner for FirecrackerRunner {
 
         // 4. Configure drive (root device)
         let drive_result = Command::new("curl")
-            .args(&[
+            .args([
                 "-N", "--unix-socket", socket.to_str().unwrap(),
                 "-X", "PUT",
                 "http://localhost/drives/root",
@@ -130,7 +130,7 @@ impl VmmRunner for FirecrackerRunner {
 
         // 5. Configure machine (vCPU, memory)
         let machine_result = Command::new("curl")
-            .args(&[
+            .args([
                 "-N", "--unix-socket", socket.to_str().unwrap(),
                 "-X", "PUT",
                 "http://localhost/machine-config",
@@ -145,7 +145,7 @@ impl VmmRunner for FirecrackerRunner {
 
         // 6. Start instance
         let start_result = Command::new("curl")
-            .args(&[
+            .args([
                 "-N", "--unix-socket", socket.to_str().unwrap(),
                 "-X", "PUT",
                 "http://localhost/actions",
@@ -190,7 +190,7 @@ impl VmInstance for FirecrackerInstance {
     fn kill(&mut self) -> Result<()> {
         // Shutdown via API
         let _ = Command::new("curl")
-            .args(&[
+            .args([
                 "--unix-socket", self.socket.to_str().unwrap(),
                 "-X", "PUT",
                 "http://localhost/actions",

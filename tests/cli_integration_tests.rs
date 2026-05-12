@@ -199,17 +199,13 @@ fn test_run_with_output_flag() {
 #[test]
 fn test_run_invalid_vmm() {
     setup();
-    let output = Command::new("./target/release/lingbench")
+    let _output = Command::new("./target/release/lingbench")
         .args(["run", "--vmm", "invalid-vmm-name"])
         .output()
         .expect("Failed to execute lingbench run");
 
-    // CLI should either error or gracefully handle unknown VMM
-    // (current implementation may not validate, but should not crash)
-    assert!(
-        !output.status.success() || true, // Just verify no crash
-        "CLI should handle invalid VMM gracefully"
-    );
+    // CLI should not crash regardless of validation behavior.
+    // .expect() above ensures the command ran successfully.
 }
 
 /// Test: Verify all subcommands are present
@@ -224,7 +220,7 @@ fn test_all_subcommands() {
             .arg(subcommand)
             .arg("--help")
             .output()
-            .expect(&format!("Failed to execute 'lingbench {}'", subcommand));
+            .unwrap_or_else(|_| panic!("Failed to execute 'lingbench {}'", subcommand));
 
         assert!(
             output.status.success(),
